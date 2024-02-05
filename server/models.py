@@ -38,7 +38,7 @@ class Camper(db.Model, SerializerMixin):
     __tablename__ = 'campers'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String)
     age = db.Column(db.Integer)
 
     signups = db.relationship(
@@ -50,8 +50,14 @@ class Camper(db.Model, SerializerMixin):
     @validates('age')
     def validate_age(self, key, age_value):
         if not (8 <= age_value <= 18):
-            raise ValueError("Incorrect age length")
+            raise ValueError("Incorrect age")
         return age_value
+    
+    @validates('name')
+    def validate_name(self, key, name_value):
+        if not name_value:
+            raise ValueError('Name must exist')
+        return name_value
     
     def __repr__(self):
         return f'<Camper {self.id}: {self.name}>'
