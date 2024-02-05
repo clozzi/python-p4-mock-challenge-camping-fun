@@ -20,10 +20,18 @@ migrate = Migrate(app, db)
 
 db.init_app(app)
 
+# api = Api(app)
 
 @app.route('/')
 def home():
-    return ''
+    return 'Home for Campers'
+# api.add_resource(Home, '/')
+
+@app.route('/campers')
+def campers():
+    campers = Camper.query.all()
+    camper_data = [camper.to_dict() for camper in campers]
+    return make_response(camper_data, 200)
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
